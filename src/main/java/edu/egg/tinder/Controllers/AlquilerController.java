@@ -2,13 +2,13 @@ package edu.egg.tinder.Controllers;
 
 
 
-import edu.egg.tinder.modelo.Alquiler;
-import edu.egg.tinder.services.CanchaServicio;
+import edu.egg.tinder.excepcions.ReservaNoDisponibleException;
+import edu.egg.tinder.modelo.Reserva;
+import edu.egg.tinder.services.ReservaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -16,13 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlquilerController {
 
     @Autowired
-    private CanchaServicio canchaServicio;
+    private final ReservaServicio reservaServicio=new ReservaServicio();
 
     @PostMapping
-    public Alquiler saveCancha(@RequestBody Alquiler alquiler){
-        return canchaServicio.GuardarCancha(alquiler);
+    public void saveCancha(@RequestBody Reserva alquiler){
+        try{
+            reservaServicio.GuardarAlquiler(alquiler);
+            ResponseEntity.status(HttpStatus.CREATED).body("Reserva Exitosa");
+        }
+        catch (ReservaNoDisponibleException e){
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
 
     }
+
+
 
 
 
