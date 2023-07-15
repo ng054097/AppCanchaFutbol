@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class AlquilerController {
 
     @Autowired
-    private final ReservaServicio reservaServicio=new ReservaServicio();
+    private  ReservaServicio reservaServicio;
 
     @PostMapping
     public void saveCancha(@RequestBody Reserva alquiler){
         try{
-            reservaServicio.GuardarAlquiler(alquiler);
+            reservaServicio.guardarAlquiler(alquiler);
             ResponseEntity.status(HttpStatus.CREATED).body("Reserva Exitosa");
         }
         catch (ReservaNoDisponibleException e){

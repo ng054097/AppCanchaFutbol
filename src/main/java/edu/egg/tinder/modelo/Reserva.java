@@ -9,11 +9,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 
-@Entity
+@Entity(name = "Reserva")
 public class Reserva {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)

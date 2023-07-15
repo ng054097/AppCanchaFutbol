@@ -11,6 +11,7 @@ import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -21,11 +22,11 @@ public class ReservaServicio {
 
 
 
-        public Reserva GuardarAlquiler(Reserva reserva){
+        public Reserva guardarAlquiler(Reserva reserva){
 
 
             if(alquileresRepository.existsByCanchaAndHorarioEntradaAndHorarioSalidaAndDia
-                    (reserva.getCancha(),reserva.getDia(),reserva.getHorarioEntrada(),reserva.getHorarioSalida())){
+                    (reserva.getCancha(),reserva.getHorarioEntrada(),reserva.getHorarioSalida(),reserva.getDia())){
 
                 throw new ReservaNoDisponibleException("La cancha no está disponible en el horario y fecha especificados.");
 
@@ -34,11 +35,14 @@ public class ReservaServicio {
         }
 
 
+    @Transactional
+        public void borrarAlquiler(Reserva reserva) {
+            this.alquileresRepository.deleteByCanchaAndDiaAndAndHorarioEntradaAndHorarioSalida(reserva.getCancha(),reserva.getDia(),reserva.getHorarioEntrada(),reserva.getHorarioSalida());
+    }
 
-
-
-
-
+    public Reserva buscarReserva(Reserva reserva) {
+            return this.alquileresRepository.findByNumeroDeCanchaAndDiaAndHorarioEntradaAndHorarioSalida(reserva.getCancha(),reserva.getDia(),reserva.getHorarioEntrada(),reserva.getHorarioSalida());
+    }
 }
 
 
